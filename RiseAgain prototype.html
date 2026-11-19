@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RiseAgain</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6FB;--surface:#fff;--ink:#14203B;--mut:#5B6782;--line:#DCE3EF;--accent:#E8A317;--accent-ink:#2B1D00;--teal:#17807E;--tealbg:#DDF1EF;--red:#B4402F;--redbg:#FBE4DF;--navy:#14203B;--navy-ink:#EAF0FB;
+--f1:"Bricolage Grotesque","Trebuchet MS",sans-serif;--f2:"Instrument Sans",system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1426;--surface:#17213A;--ink:#EAF0FB;--mut:#9AA8C6;--line:#2A3757;--tealbg:#143B3C;--redbg:#401F1A;--red:#F08B7A;--teal:#4FC7C2;--navy:#0A1020}}
+:root[data-theme="dark"]{--bg:#0D1426;--surface:#17213A;--ink:#EAF0FB;--mut:#9AA8C6;--line:#2A3757;--tealbg:#143B3C;--redbg:#401F1A;--red:#F08B7A;--teal:#4FC7C2;--navy:#0A1020}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f2);min-height:100%}
+h1,h2,h3{font-family:var(--f1);margin:0;line-height:1.15}
+h1{font-size:28px}h2{font-size:20px}h3{font-size:16px}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+nav{background:var(--navy);color:var(--navy-ink);padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.logo{font:700 22px var(--f1);padding:0 10px 18px;display:flex;align-items:center;gap:8px}
+.sun{width:22px;height:22px;border-radius:50% 50% 0 0;background:var(--accent);display:inline-block}
+nav button{all:unset;cursor:pointer;padding:10px 12px;border-radius:8px;color:#B9C6E3;display:flex;gap:10px;align-items:center}
+nav button:hover{background:rgba(255,255,255,.07)}
+nav button[aria-current=true]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+nav button:focus-visible,button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.me{margin-top:auto;font-size:13px;color:#B9C6E3;padding:10px}
+main{padding:28px clamp(16px,4vw,44px) 60px;max-width:1040px;width:100%}
+.sub{color:var(--mut);margin:6px 0 22px;max-width:62ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.row{display:flex;gap:14px;flex-wrap:wrap}.row>*{flex:1 1 280px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 16px;min-width:110px}
+.stat b{font:700 24px var(--f1);display:block}.stat span{color:var(--mut);font-size:13px}
+.btn{all:unset;cursor:pointer;background:var(--accent);color:var(--accent-ink);font-weight:600;padding:9px 16px;border-radius:8px;text-align:center}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:hover{filter:brightness(.95)}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:var(--bg);border:1px solid var(--line);margin:2px 4px 2px 0}
+.pill.ok{background:var(--tealbg);color:var(--teal);border-color:transparent}
+.pill.no{background:var(--redbg);color:var(--red);border-color:transparent}
+.pill.adj{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:600}
+textarea,input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+textarea{min-height:200px;resize:vertical}
+label{font-weight:600;font-size:13px;display:block;margin:12px 0 5px}
+.tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.tabs button{all:unset;cursor:pointer;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+.tabs button[aria-pressed=true]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.deck{display:flex;flex-direction:column;align-items:center;gap:16px}
+.swipe{width:min(420px,100%);padding:24px;transition:transform .35s,opacity .35s}
+.swipe.l{transform:translateX(-140%) rotate(-12deg);opacity:0}.swipe.r{transform:translateX(140%) rotate(12deg);opacity:0}
+.match{font:700 34px var(--f1);color:var(--teal)}
+.acts{display:flex;gap:14px}.acts .btn{min-width:120px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:13px;color:var(--mut);font-weight:500}.tw{overflow-x:auto}
+td select{width:auto;padding:5px 8px}
+.bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--teal);transition:width .5s}
+.score{font:700 44px var(--f1)}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;margin-bottom:10px}
+.msg{padding:9px 13px;border-radius:12px;max-width:85%}.msg.u{align-self:flex-end;background:var(--navy);color:var(--navy-ink)}.msg.c{background:var(--bg);border:1px solid var(--line)}
+.empty{color:var(--mut);text-align:center;padding:30px 10px}
+.toast{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--navy);color:var(--navy-ink);padding:9px 16px;border-radius:99px;font-size:14px}
+pre{white-space:pre-wrap;font:inherit;margin:0}
+@media (max-width:760px){
+.app{grid-template-columns:1fr}
+nav{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5;justify-content:space-around}
+nav button{flex-direction:column;gap:2px;font-size:12px;padding:6px 10px}.logo,.me{display:none}
+main{padding-bottom:100px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav aria-label="Main">
+<div class="logo"><span class="sun"></span>RiseAgain</div>
+<button data-v="jobs">🧭 Jobs</button>
+<button data-v="resume">📄 Resume</button>
+<button data-v="interview">🎤 Interview</button>
+<div class="me">Maya Torres<br>Marketing Coordinator<br>4 yrs experience</div>
+</nav>
+<main id="main"></main>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script>
+const JOBS=[
+{id:1,title:"Product Marketing Associate",co:"Northwind Software",loc:"Austin, TX",mode:"Hybrid",sal:"$78–92k",match:91,adj:true,why:"Your launch campaigns and sales collaboration map directly to positioning and go-to-market work.",kw:["go-to-market","positioning","a/b testing","hubspot","cross-functional","analytics","messaging","launch"],qs:["Tell me about a launch you helped drive. What was your role?","How would you decide which message to test first?","Describe a time you worked with sales to improve a pitch."]},
+{id:2,title:"Content Marketing Manager",co:"Brightleaf Health",loc:"Remote",mode:"Remote",sal:"$85–100k",match:88,adj:false,why:"Direct match: content calendars, newsletter growth and analytics.",kw:["content strategy","seo","editorial calendar","analytics","newsletter","a/b testing","social media","hubspot"],qs:["Walk me through how you build an editorial calendar.","Tell me about content you made that performed well. How did you measure it?","How do you handle conflicting feedback from stakeholders?"]},
+{id:3,title:"Customer Success Manager",co:"Loopline",loc:"Denver, CO",mode:"Hybrid",sal:"$80–95k",match:82,adj:true,why:"Webinars and customer-facing communication show you can teach and retain customers.",kw:["onboarding","retention","stakeholder","webinars","crm","renewals","customer feedback","analytics"],qs:["Tell me about a time you turned around an unhappy customer.","How do you prioritize across many accounts?","Describe how you explain a complex feature to a beginner."]},
+{id:4,title:"Lifecycle Marketing Specialist",co:"Fernhill Commerce",loc:"Remote",mode:"Remote",sal:"$72–88k",match:86,adj:false,why:"Email campaigns, segmentation and A/B tests are core to this role.",kw:["email marketing","segmentation","a/b testing","hubspot","retention","automation","analytics","newsletter"],qs:["Tell me about an email campaign you improved. What changed?","How would you segment a list of 50,000 subscribers?","Describe a test that failed and what you learned."]},
+{id:5,title:"Community Manager",co:"Tandem Studio",loc:"Chicago, IL",mode:"On-site",sal:"$65–78k",match:74,adj:true,why:"Social media and event experience carry over to building an engaged community.",kw:["community","social media","events","engagement","moderation","content creation","analytics","partnerships"],qs:["How would you grow a community from 500 to 5,000 members?","Tell me about a time you handled a difficult comment publicly.","Which metrics tell you a community is healthy?"]},
+{id:6,title:"Sales Enablement Specialist",co:"Cobalt Cloud",loc:"Remote",mode:"Remote",sal:"$82–96k",match:79,adj:true,why:"You already create materials sales teams use. This role makes that your focus.",kw:["sales enablement","training","content creation","crm","cross-functional","playbooks","hubspot","analytics"],qs:["Describe a resource you created that sales actually used.","How do you get feedback from reps?","Tell me about a time you taught a skill to a group."]}];
+const RESUME0=`Maya Torres — Marketing Coordinator
+Austin, TX · maya@example.com
+
+EXPERIENCE
+Marketing Coordinator, Pinecrest Software (2022–present)
+• Ran weekly email campaigns in HubSpot for a 24,000-person list
+• Grew newsletter subscribers 32% in 8 months with a refreshed content calendar
+• Hosted 12 webinars for prospects and customers
+• Worked with the sales team on launch materials for two product releases
+• Reviewed Google Analytics monthly to report on traffic and conversions
+• Managed social media accounts across LinkedIn and Instagram
+
+Marketing Intern, Lumen Retail (2021)
+• Drafted blog posts and product descriptions
+• Supported A/B testing of promotional emails
+
+SKILLS: HubSpot, Google Analytics, Canva, Mailchimp, copywriting`;
+const S={view:"jobs",jtab:"swipe",deck:JOBS.map(j=>j.id),saved:{},resume:RESUME0,scanJob:1,ivJob:1,qi:0,fb:null,chat:[{c:1,t:"Hi Maya. I’m your career counselor. Ask me about switching roles, salary negotiation or what to practice next."}]};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const job=id=>JOBS.find(j=>j.id==id);
+function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2200)}
+function go(v){S.view=v;render()}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+
+function render(){
+ document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v==S.view));
+ $("#main").innerHTML=({jobs:vJobs,resume:vResume,interview:vInterview})[S.view]();
+ window.scrollTo(0,0);
+}
+function jobSelect(id,fn){return `<select onchange="${fn}(this.value)" aria-label="Choose a job">${JOBS.map(j=>`<option value="${j.id}" ${j.id==id?"selected":""}>${j.title} · ${j.co}</option>`).join("")}</select>`}
+
+/* ---------- JOBS ---------- */
+function vJobs(){
+ const sv=Object.values(S.saved);
+ const st=k=>sv.filter(s=>s.status==k).length;
+ return `<h1>Find your next role</h1><p class="sub">Matched on your skills and accomplishments, not just your job title. Roles marked <span class="pill adj">Adjacent</span> are outside your current title but fit your experience.</p>
+ <div class="stats"><div class="stat"><b>${sv.length}</b><span>Saved</span></div><div class="stat"><b>${st("Applied")}</b><span>Applied</span></div><div class="stat"><b>${st("Interviewing")}</b><span>Interviewing</span></div><div class="stat"><b>${st("Offer")}</b><span>Offers</span></div></div>
+ <div class="tabs"><button aria-pressed="${S.jtab=="swipe"}" onclick="S.jtab='swipe';render()">Discover</button><button aria-pressed="${S.jtab=="track"}" onclick="S.jtab='track';render()">Tracker (${sv.length})</button></div>
+ ${S.jtab=="swipe"?vDeck():vTrack()}`;
+}
+function vDeck(){
+ const j=S.deck.length?job(S.deck[0]):null;
+ if(!j)return `<div class="card empty">You’ve seen every match for now.<br><br><button class="btn" onclick="S.deck=JOBS.map(j=>j.id);render()">Review matches again</button></div>`;
+ return `<div class="deck"><div class="card swipe" id="sw">
+ <div class="match">${j.match}% match</div><h2>${j.title}</h2><div style="color:var(--mut)">${j.co} · ${j.loc}</div>
+ <p style="margin:10px 0">${j.why}</p>
+ <div><span class="pill">${j.mode}</span><span class="pill">${j.sal}</span>${j.adj?'<span class="pill adj">Adjacent role</span>':'<span class="pill ok">Matches your title</span>'}</div>
+ <div style="margin-top:8px">${j.kw.slice(0,5).map(k=>`<span class="pill">${k}</span>`).join("")}</div></div>
+ <div class="acts"><button class="btn alt" onclick="swipe('l')">Pass</button><button class="btn" onclick="swipe('r')">Save</button></div>
+ <div style="color:var(--mut);font-size:13px">${S.deck.length} left · Tip: use ← and → keys</div></div>`;
+}
+function swipe(d){
+ const el=$("#sw");if(!el||!S.deck.length)return;
+ const id=S.deck[0];el.classList.add(d);
+ setTimeout(()=>{S.deck.shift();if(d=="r"){S.saved[id]={id,status:"Saved"};toast("Saved to your tracker")}render()},300);
+}
+document.addEventListener("keydown",e=>{if(S.view=="jobs"&&S.jtab=="swipe"&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){if(e.key=="ArrowLeft")swipe("l");if(e.key=="ArrowRight")swipe("r")}});
+function vTrack(){
+ const sv=Object.values(S.saved);
+ if(!sv.length)return `<div class="card empty">Nothing saved yet. Swipe right on roles in Discover to track them here.</div>`;
+ return `<div class="card tw"><table><tr><th>Role</th><th>Salary</th><th>Work mode</th><th>Status</th><th></th></tr>${sv.map(s=>{const j=job(s.id);return `<tr><td><b>${j.title}</b><br><span style="color:var(--mut)">${j.co} · ${j.loc}</span></td><td>${j.sal}</td><td>${j.mode}</td>
+ <td><select aria-label="Status for ${j.title}" onchange="S.saved[${j.id}].status=this.value;render()">${["Saved","Applied","Interviewing","Offer"].map(o=>`<option ${o==s.status?"selected":""}>${o}</option>`).join("")}</select></td>
+ <td style="white-space:nowrap"><button class="btn alt" onclick="toast('Prototype: this would open the job post')">Apply</button> <button class="btn alt" onclick="S.ivJob=${j.id};S.qi=0;S.fb=null;go('interview')">Practice</button></td></tr>`}).join("")}</table></div>`;
+}
+
+/* ---------- RESUME ---------- */
+function scan(){
+ const j=job(S.scanJob),t=S.resume.toLowerCase();
+ const found=j.kw.filter(k=>t.includes(k)),miss=j.kw.filter(k=>!t.includes(k));
+ return {j,found,miss,score:Math.round(found.length/j.kw.length*100)};
+}
+function vResume(){
+ const r=scan();
+ return `<h1>Resume services</h1><p class="sub">Compare your resume with a job post, fill the gaps with experience you really have, and generate a cover letter.</p>
+ <div class="row"><div class="card"><label for="sj" style="margin-top:0">Target job</label>${jobSelect(S.scanJob,"setScanJob")}
+ <label for="rt">Your resume</label><textarea id="rt" oninput="S.resume=this.value">${esc(S.resume)}</textarea>
+ <div style="margin-top:12px"><button class="btn" onclick="S.resume=$('#rt').value;render()">Run ATS scan</button></div></div>
+ <div class="card"><div class="score" style="color:${r.score>=70?"var(--teal)":r.score>=45?"var(--ink)":"var(--red)"}">${r.score}%</div>
+ <div style="color:var(--mut)">ATS keyword match for ${r.j.title}</div><div class="bar"><i style="width:${r.score}%"></i></div>
+ <h3 style="margin-top:14px">Found</h3><div>${r.found.map(k=>`<span class="pill ok">${k}</span>`).join("")||'<span style="color:var(--mut)">None yet</span>'}</div>
+ <h3 style="margin-top:14px">Missing</h3><div>${r.miss.map(k=>`<span class="pill no">${k}</span>`).join("")||'<span style="color:var(--teal)">Nothing missing. Nice work.</span>'}</div></div></div>
+ ${r.miss.length?`<div class="card" style="margin-top:14px"><h2>Fill the gaps truthfully</h2><p class="sub" style="margin:4px 0 8px">Have you done any of this? If yes, describe it in one sentence using the keyword. We only add what you write.</p>
+ ${r.miss.slice(0,3).map((k,i)=>`<label for="g${i}">Experience with “${k}”</label><div style="display:flex;gap:8px"><input id="g${i}" placeholder="e.g. I…"><button class="btn" onclick="addBullet('g${i}','${k}')">Add</button></div>`).join("")}</div>`:""}
+ <div class="card" style="margin-top:14px"><h2>Cover letter</h2><p class="sub" style="margin:4px 0 10px">Drafted from the job and the strengths found in your resume.</p>
+ <button class="btn alt" onclick="cover()">Generate cover letter</button><div id="cl" style="margin-top:12px"></div></div>`;
+}
+function setScanJob(v){S.resume=$("#rt").value;S.scanJob=+v;render()}
+function addBullet(id,k){
+ const v=$("#"+id).value.trim();
+ if(!v){toast("Describe your experience first");return}
+ if(!v.toLowerCase().includes(k)){toast("Include “"+k+"” in your sentence so the scan can find it");return}
+ S.resume=$("#rt").value.replace(/\n\nMarketing Intern/,"\n• "+v+"\n\nMarketing Intern");render();toast("Added to resume");
+}
+function cover(){
+ S.resume=$("#rt").value;const r=scan(),j=r.j;
+ const s=r.found.slice(0,3).join(", ")||"marketing";
+ $("#cl").innerHTML=`<div class="card" style="background:var(--bg)"><pre>Dear ${j.co} hiring team,
+
+I’m excited to apply for the ${j.title} role. Over four years as a Marketing Coordinator, I grew a newsletter by 32% in eight months and ran 12 webinars, work that built my experience in ${s}.
+
+${j.adj?"Although my title has been different, the day-to-day work overlaps closely with this role: I’ve worked with sales on two launches and used analytics to decide what to do next.":"This role matches the work I do every day, and I’m ready to take on more ownership."}
+
+I’d welcome the chance to talk about how I can help ${j.co}.
+
+Sincerely,
+Maya Torres</pre></div>`;
+}
+
+/* ---------- INTERVIEW ---------- */
+function vInterview(){
+ const j=job(S.ivJob),q=j.qs[S.qi];
+ return `<h1>Interview practice</h1><p class="sub">Questions come from the job description. Answer in your own words and get coaching on content and structure.</p>
+ <div class="row"><div class="card"><label style="margin-top:0">Practice for</label>${jobSelect(S.ivJob,"setIv")}
+ <div class="tabs" style="margin:14px 0 8px">${j.qs.map((_,i)=>`<button aria-pressed="${i==S.qi}" onclick="S.qi=${i};S.fb=null;render()">Q${i+1}</button>`).join("")}</div>
+ <h2>${q}</h2><label for="ans">Your answer</label><textarea id="ans" style="min-height:150px" placeholder="Try the STAR format: Situation, Task, Action, Result"></textarea>
+ <div style="margin-top:12px"><button class="btn" onclick="grade()">Get feedback</button></div>
+ ${S.fb?`<div style="margin-top:16px">${S.fb}</div>`:""}</div>
+ <div class="card"><h2>Career counselor</h2><div class="chat" id="chat">${S.chat.map(m=>`<div class="msg ${m.c?"c":"u"}">${esc(m.t)}</div>`).join("")}</div>
+ <div style="display:flex;gap:8px"><input id="ci" aria-label="Message" placeholder="Ask a question" onkeydown="if(event.key=='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div></div></div>`;
+}
+function setIv(v){S.ivJob=+v;S.qi=0;S.fb=null;render()}
+function grade(){
+ const a=$("#ans").value.trim(),l=a.toLowerCase(),w=a.split(/\s+/).filter(Boolean).length;
+ if(w<8){toast("Write a fuller answer first");return}
+ const chk=[["Situation",/when|at my|while|situation|project|team/],["Task",/goal|responsible|needed to|task|asked to/],["Action",/i (led|built|created|ran|worked|decided|organized|designed|launched|set)|my role/],["Result",/\d|result|increased|grew|improved|reduced|saved|outcome/]].map(([n,re])=>[n,re.test(l)]);
+ const got=chk.filter(c=>c[1]).length,len=w>=60&&w<=220,num=/\d/.test(a);
+ const tips=[];
+ chk.forEach(([n,ok])=>{if(!ok)tips.push(n=="Result"?"Close with a result. Add a number if you can.":"Add your "+n.toLowerCase()+" so the story is easier to follow.")});
+ if(w<60)tips.push("Aim for 60–200 words. Yours is "+w+".");if(w>220)tips.push("Tighten it. Over 220 words is hard to follow out loud.");
+ if(!num)tips.push("Use at least one metric, such as a percentage or count.");
+ S.fb=`<h3>Feedback · ${Math.round((got/4*70)+(len?15:0)+(num?15:0))}/100</h3><div style="margin:8px 0">${chk.map(([n,ok])=>`<span class="pill ${ok?"ok":"no"}">${n}</span>`).join("")}</div>
+ <ul style="margin:6px 0 0;padding-left:20px">${tips.length?tips.map(t=>`<li>${t}</li>`).join(""):"<li>Strong, well-structured answer. Try the next question.</li>"}</ul>`;
+ const keep=a;render();$("#ans").value=keep;
+}
+function ask(){
+ const i=$("#ci"),t=i.value.trim();if(!t)return;
+ const l=t.toLowerCase();let r="Tell me more about what you want from your next role, and I can suggest where to start.";
+ if(/salary|negotiat|offer/.test(l))r="Always counter. Research the range, then say: “I’m excited about the role. Based on my experience and the market, I was hoping for $X. Is there flexibility?” Then stop talking and listen.";
+ else if(/laid off|layoff/.test(l))r="Being laid off isn’t a reflection of your skills. Keep your explanation to one calm sentence, then move to what you can do next. Broaden your search to adjacent roles in Discover.";
+ else if(/switch|change|pivot|transfer/.test(l))r="List your transferable skills first. For you, launches, analytics and sales collaboration open up Product Marketing and Customer Success. Save a few adjacent roles to compare.";
+ else if(/nervous|anxious|confidence|practice/.test(l))r="Practice out loud with 3 questions a day. Confidence comes from reps, not from reading tips.";
+ S.chat.push({u:1,t},{c:1,t:r});render();const c=$("#chat");c.scrollTop=c.scrollHeight;$("#ci").focus();
+}
+render();
+</script>
+</body>
+</html>
